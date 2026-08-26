@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investment Journal</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard",
+                   "Noto Sans KR", sans-serif;
+      background: #f5f6f8;
+      color: #17191d;
+    }
+
+    .app {
+      width: min(1440px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 34px 0 60px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      color: #7a808a;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -1.2px;
+    }
+
+    .date {
+      color: #737983;
+      font-size: 14px;
+    }
+
+    /* Common */
+    .card {
+      background: #fff;
+      border: 1px solid #e8eaee;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(20, 25, 35, 0.025);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid #f0f1f3;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .card-subtitle {
+      color: #9297a0;
+      font-size: 12px;
+    }
+
+    /* Market */
+    .market {
+      margin-bottom: 18px;
+    }
+
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .market-item {
+      padding: 18px 20px;
+      border-right: 1px solid #f0f1f3;
+    }
+
+    .market-item:last-child {
+      border-right: none;
+    }
+
+    .market-name {
+      color: #858a93;
+      font-size: 12px;
+      margin-bottom: 9px;
+    }
+
+    .market-value {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .change {
+      margin-top: 5px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .up {
+      color: #e5484d;
+    }
+
+    .down {
+      color: #3478db;
+    }
+
+    .neutral {
+      color: #858a93;
+    }
+
+    /* Main grid */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    /* News */
+    .news-list {
+      padding: 4px 22px 14px;
+    }
+
+    .news {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 17px 0;
+      border-bottom: 1px solid #f0f1f3;
+    }
+
+    .news:last-child {
+      border-bottom: none;
+    }
+
+    .news-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 26px;
+      border-radius: 7px;
+      background: #f2f4f7;
+      color: #686e78;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .news-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.5;
+      letter-spacing: -0.2px;
+    }
+
+    .news-meta {
+      color: #a0a5ad;
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .impact {
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Portfolio */
+    .portfolio-list {
+      padding: 5px 22px 12px;
+    }
+
+    .stock {
+      padding: 16px 0;
+      border-bottom: 1px solid #f0f1f3;
+    }
+
+    .stock:last-child {
+      border-bottom: none;
+    }
+
+    .stock-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stock-name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .stock-code {
+      color: #9a9fa7;
+      font-size: 11px;
+      margin-left: 5px;
+    }
+
+    .stock-price {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .stock-bottom {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 7px;
+      font-size: 12px;
+    }
+
+    .thesis {
+      color: #757a83;
+    }
+
+    .thesis strong {
+      color: #17191d;
+    }
+
+    /* Bottom */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+    }
+
+    /* Trades */
+    .trade-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .trade-table th {
+      text-align: left;
+      color: #9a9fa7;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 14px 22px;
+      background: #fafbfc;
+    }
+
+    .trade-table td {
+      padding: 15px 22px;
+      border-top: 1px solid #f0f1f3;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .buy {
+      color: #df4147;
+      background: #fff0f0;
+    }
+
+    .sell {
+      color: #3272c9;
+      background: #edf4ff;
+    }
+
+    /* Memo */
+    .memo {
+      padding: 20px 22px 24px;
+    }
+
+    .memo-label {
+      font-size: 11px;
+      color: #9297a0;
+      margin-bottom: 8px;
+    }
+
+    .memo-text {
+      color: #353940;
+      font-size: 14px;
+      line-height: 1.75;
+      min-height: 80px;
+    }
+
+    .memo-divider {
+      height: 1px;
+      background: #f0f1f3;
+      margin: 18px 0;
+    }
+
+    .decision {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .decision-item {
+      background: #f7f8fa;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .decision-label {
+      color: #9297a0;
+      font-size: 10px;
+      margin-bottom: 5px;
+    }
+
+    .decision-value {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Focus */
+    .focus {
+      margin-top: 18px;
+      background: #17191d;
+      color: #fff;
+      border-radius: 16px;
+      padding: 22px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .focus-label {
+      color: #9da2aa;
+      font-size: 11px;
+      margin-bottom: 7px;
+    }
+
+    .focus-question {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+    }
+
+    .focus-answer {
+      width: 48%;
+      color: #d9dce0;
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    @media (max-width: 1000px) {
+      .market-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .market-item:nth-child(3) {
+        border-right: none;
+      }
+
+      .main-grid,
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .focus {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .focus-answer {
+        width: 100%;
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .app {
+        width: min(100% - 24px, 1440px);
+        padding-top: 22px;
+      }
+
+      .header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .market-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .market-item:nth-child(2n) {
+        border-right: none;
+      }
+
+      .news {
+        grid-template-columns: 48px 1fr;
+      }
+
+      .impact {
+        display: none;
+      }
+
+      .decision {
+        grid-template-columns: 1fr;
+      }
+
+      .trade-table th,
+      .trade-table td {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <!-- Header -->
+    <header class="header">
+      <div>
+        <div class="eyebrow">INVESTMENT JOURNAL</div>
+        <h1>오늘의 투자 대시보드</h1>
+      </div>
+      <div class="date">2026. 08. 19 · 수요일</div>
+    </header>
+
+
+    <!-- Market -->
+    <section class="card market">
+      <div class="card-header">
+        <div class="card-title">오늘의 핵심 지표</div>
+        <div class="card-subtitle">시장 전체의 방향</div>
+      </div>
+
+      <div class="market-grid">
+
+        <div class="market-item">
+          <div class="market-name">KOSPI</div>
+          <div class="market-value">3,184.62</div>
+          <div class="change up">▲ 1.24%</div>
+        </div>
+
+        <div class="market-item">
+          <div class="market-name">KOSDAQ</div>
+          <div class="market-value">912.84</div>
+          <div class="change up">▲ 0.82%</div>
+        </div>
+
+        <div class="market-item">
+          <div class="market-name">NASDAQ</div>
+          <div class="market-value">21,482.91</div>
+          <div class="change up">▲ 0.67%</div>
+        </div>
+
+        <div class="market-item">
+          <div class="market-name">USD / KRW</div>
+          <div class="market-value">1,386.40</div>
+          <div class="change down">▼ 0.32%</div>
+        </div>
+
+        <div class="market-item">
+          <div class="market-name">US 10Y</div>
+          <div class="market-value">4.21%</div>
+          <div class="change up">▲ 0.04%p</div>
+        </div>
+
+        <div class="market-item">
+          <div class="market-name">WTI</div>
+          <div class="market-value">$66.84</div>
+          <div class="change neutral">— 0.08%</div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Main -->
+    <div class="main-grid">
+
+      <!-- News -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">오늘의 핵심 뉴스</div>
+          <div class="card-subtitle">투자 판단에 영향을 주는 뉴스만</div>
+        </div>
+
+        <div class="news-list">
+
+          <div class="news">
+            <div class="news-tag">시장</div>
+            <div>
+              <div class="news-title">
+                미국 증시, 기술주 중심 상승세 지속
+              </div>
+              <div class="news-meta">
+                글로벌 증시 · 08:20
+              </div>
+            </div>
+            <div class="impact up">긍정적</div>
+          </div>
+
+          <div class="news">
+            <div class="news-tag">금리</div>
+            <div>
+              <div class="news-title">
+                미국 장기금리 상승, 성장주 밸류에이션 부담 확대
+              </div>
+              <div class="news-meta">
+                매크로 · 09:05
+              </div>
+            </div>
+            <div class="impact down">부정적</div>
+          </div>
+
+          <div class="news">
+            <div class="news-tag">반도체</div>
+            <div>
+              <div class="news-title">
+                AI 데이터센터 투자 확대에 따른 HBM 수요 전망 상향
+              </div>
+              <div class="news-meta">
+                반도체 업종 · 09:42
+              </div>
+            </div>
+            <div class="impact up">긍정적</div>
+          </div>
+
+          <div class="news">
+            <div class="news-tag">환율</div>
+            <div>
+              <div class="news-title">
+                원/달러 환율 하락, 외국인 수급에 우호적인 환경
+              </div>
+              <div class="news-meta">
+                외환시장 · 10:12
+              </div>
+            </div>
+            <div class="impact up">긍정적</div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- Portfolio -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">내 투자 종목</div>
+          <div class="card-subtitle">투자 논리 변화</div>
+        </div>
+
+        <div class="portfolio-list">
+
+          <div class="stock">
+            <div class="stock-top">
+              <div>
+                <span class="stock-name">삼성전자</span>
+                <span class="stock-code">005930</span>
+              </div>
+              <div class="stock-price">78,400원</div>
+            </div>
+            <div class="stock-bottom">
+              <span class="thesis">오늘의 판단 · <strong>강화</strong></span>
+              <span class="up">+2.31%</span>
+            </div>
+          </div>
+
+          <div class="stock">
+            <div class="stock-top">
+              <div>
+                <span class="stock-name">SK하이닉스</span>
+                <span class="stock-code">000660</span>
+              </div>
+              <div class="stock-price">248,500원</div>
+            </div>
+            <div class="stock-bottom">
+              <span class="thesis">오늘의 판단 · <strong>강화</strong></span>
+              <span class="up">+3.18%</span>
+            </div>
+          </div>
+
+          <div class="stock">
+            <div class="stock-top">
+              <div>
+                <span class="stock-name">현대차</span>
+                <span class="stock-code">005380</span>
+              </div>
+              <div class="stock-price">214,000원</div>
+            </div>
+            <div class="stock-bottom">
+              <span class="thesis">오늘의 판단 · <strong>유지</strong></span>
+              <span class="down">-0.46%</span>
+            </div>
+          </div>
+
+          <div class="stock">
+            <div class="stock-top">
+              <div>
+                <span class="stock-name">NAVER</span>
+                <span class="stock-code">035420</span>
+              </div>
+              <div class="stock-price">264,500원</div>
+            </div>
+            <div class="stock-bottom">
+              <span class="thesis">오늘의 판단 · <strong>약화</strong></span>
+              <span class="down">-1.12%</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- Bottom -->
+    <div class="bottom-grid">
+
+      <!-- Trades -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">오늘의 매매</div>
+          <div class="card-subtitle">왜 사고, 왜 팔았는가</div>
+        </div>
+
+        <table class="trade-table">
+          <thead>
+            <tr>
+              <th>구분</th>
+              <th>종목</th>
+              <th>수량</th>
+              <th>가격</th>
+              <th>이유</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td><span class="badge buy">추가매수</span></td>
+              <td><strong>SK하이닉스</strong></td>
+              <td>10주</td>
+              <td>241,000</td>
+              <td>HBM 수요 전망 강화</td>
+            </tr>
+
+            <tr>
+              <td><span class="badge sell">일부매도</span></td>
+              <td><strong>NAVER</strong></td>
+              <td>5주</td>
+              <td>267,000</td>
+              <td>투자 가설 약화</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+
+      <!-- Memo -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">오늘의 투자 생각</div>
+          <div class="card-subtitle">사실보다 중요한 나의 판단</div>
+        </div>
+
+        <div class="memo">
+
+          <div class="memo-label">오늘의 해석</div>
+
+          <div class="memo-text">
+            반도체 업종은 AI 데이터센터 투자 확대가 지속되고 있어
+            기존의 투자 가설이 강화되었다. 반면 금리 상승은 성장주
+            밸류에이션에 부담이 될 수 있으므로 추격 매수는 신중하게
+            접근할 필요가 있다.
+          </div>
+
+          <div class="memo-divider"></div>
+
+          <div class="decision">
+
+            <div class="decision-item">
+              <div class="decision-label">오늘의 행동</div>
+              <div class="decision-value">선별적 추가매수</div>
+            </div>
+
+            <div class="decision-item">
+              <div class="decision-label">투자 확신</div>
+              <div class="decision-value">★★★★☆</div>
+            </div>
+
+            <div class="decision-item">
+              <div class="decision-label">내일 확인</div>
+              <div class="decision-value">외국인 수급</div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- Focus -->
+    <section class="focus">
+
+      <div>
+        <div class="focus-label">TODAY'S CORE QUESTION</div>
+        <div class="focus-question">
+          오늘의 새로운 정보가 나의 투자 가설을 강화했는가?
+        </div>
+      </div>
+
+      <div class="focus-answer">
+        반도체 수요에 대한 긍정적인 신호가 추가되면서
+        기존 투자 가설은 강화되었다. 다만 금리와 밸류에이션은
+        계속 확인할 필요가 있다.
+      </div>
+
+    </section>
+
+  </main>
+
+</body>
+</html>

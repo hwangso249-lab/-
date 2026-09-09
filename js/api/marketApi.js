@@ -1,6 +1,6 @@
-const API_KEY = "";
+const API_KEY = "34FB9C375A5D41159C3AEA474A17F0A995416F5A";
 
-const API_URL = "KRX_API_URL";
+const API_URL = "https://data-dbg.krx.co.kr/svc/apis";
 
 
 export async function getMarketData() {

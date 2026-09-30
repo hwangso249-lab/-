@@ -12,8 +12,20 @@ export function Header(date) {
         </h1>
       </div>
 
-      <div class="date">
-        ${date}
+      <div class="header-right">
+
+        <div class="date">
+          ${date}
+        </div>
+
+        <button
+          id="logout-button"
+          type="button"
+          class="logout-button"
+        >
+          로그아웃
+        </button>
+
       </div>
 
     </header>

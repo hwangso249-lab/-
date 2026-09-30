@@ -58,6 +58,47 @@ h1 {
 
 
 /* =========================
+   Header Actions
+========================= */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logout-button {
+  border: 1px solid #e1e4e8;
+  background: #fff;
+  color: #555b64;
+
+  padding: 8px 13px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.logout-button:hover {
+  background: #f7f8fa;
+  border-color: #d5d9df;
+  color: #17191d;
+}
+
+.logout-button:active {
+  background: #eef0f3;
+}
+
+
+/* =========================
    Common
 ========================= */
 
@@ -497,6 +538,11 @@ h1 {
 
   h1 {
     font-size: 25px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .market-grid {
